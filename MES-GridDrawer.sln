@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29230.47
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MES-GridDrawer", "MES-GridDrawer\MES-GridDrawer.csproj", "{0021317C-ED5B-4FDB-B5A7-2498CF99F812}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0021317C-ED5B-4FDB-B5A7-2498CF99F812}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0021317C-ED5B-4FDB-B5A7-2498CF99F812}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0021317C-ED5B-4FDB-B5A7-2498CF99F812}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0021317C-ED5B-4FDB-B5A7-2498CF99F812}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1A276755-4B01-4B0E-AF87-BB19B8DD0104}
+	EndGlobalSection
+EndGlobal
