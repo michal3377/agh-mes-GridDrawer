@@ -9,13 +9,13 @@ namespace MES_GridDrawer.FEM {
         
         public double[] Weights;
         public double[] IntegrationPoints;
-        public Point[] Points;
+        public IntegrationPoint[] Points;
         
         public double[,] NValues = new double[4, 4];
         public double[,] KsiValues = new double[4, 4];
         public double[,] EtaValues = new double[4, 4];
         
-        public void CalculateMatrixes() {
+        public void CalculateMatrices() {
             double eta = 0;
             double ksi = 0;
             for (int i = 0; i < 4; i++) {
@@ -52,16 +52,16 @@ namespace MES_GridDrawer.FEM {
 
 
         public static UniversalElement CreateDefault2Point() {
-            double x1 = -1d / Math.Sqrt(3);
-            double x2 = 1d / Math.Sqrt(3);
+            double p1 = -1d / Math.Sqrt(3);
+            double p2 = 1d / Math.Sqrt(3);
             var element = new UniversalElement {
                 Weights = new[] {1d, 1d}, 
-                IntegrationPoints = new[] {x1, x2},
+                IntegrationPoints = new[] {p1, p2},
                 Points = new [] {
-                    new Point(x1, x1),
-                    new Point(x2, x1),
-                    new Point(x2, x2), 
-                    new Point(x1, x2) 
+                    new IntegrationPoint(p1, p1, 1, 1),
+                    new IntegrationPoint(p2, p1, 1, 1),
+                    new IntegrationPoint(p2, p2, 1, 1),
+                    new IntegrationPoint(p1, p2, 1, 1)
                 }
             };
             return element;

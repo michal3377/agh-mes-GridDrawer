@@ -1,4 +1,5 @@
 using System;
+using MES_GridDrawer.Utils;
 
 namespace MES_GridDrawer.FEM {
     public class Element {
@@ -13,6 +14,9 @@ namespace MES_GridDrawer.FEM {
         public double[][,] Jacobians = new double[4][,];
         public double[][,] TransformedJacobians = new double[4][,];
         public double[] JacobianDeterminals = new double[4];
+        public double[][,] HLocalMatrices = new double[4][,];
+        public double[,] HGlobalMatrix = new double[4,4];
+
 
         public UniversalElement UniversalElement;
         
@@ -74,6 +78,47 @@ namespace MES_GridDrawer.FEM {
                                                           + TransformedJacobians[pointIndex][1, 1] *
                                                           UniversalElement.EtaValues[pointIndex, nIndex]);
         }
+
+        private void CalculateHLocals() {
+            for (int pointIndex = 0; pointIndex < 4; pointIndex++) {
+                var dNdX = new[] {
+                    CalculateDnDx(pointIndex, 0),
+                    CalculateDnDx(pointIndex, 1),
+                    CalculateDnDx(pointIndex, 2),
+                    CalculateDnDx(pointIndex, 3)
+                };
+                var dNdY = new[] {
+                    CalculateDnDy(pointIndex, 0),
+                    CalculateDnDy(pointIndex, 1),
+                    CalculateDnDy(pointIndex, 2),
+                    CalculateDnDy(pointIndex, 3)
+                };
+                var dNdXMatrix = dNdX.ToMatrix();
+                var dNdXMatrixT = dNdX.Transpose();
+            
+                var dNdYMatrix = dNdY.ToMatrix();
+                var dNdYMatrixT = dNdY.Transpose();
+
+                var dx = MatrixCalculations.MultiplyMatrices(dNdXMatrix, dNdXMatrixT);
+                var dy = MatrixCalculations.MultiplyMatrices(dNdYMatrix, dNdYMatrixT);
+
+                HLocalMatrices[pointIndex] = MatrixCalculations.AddMatrices(dx, dy);
+            }
+        }
+
+        public void CalculateHGlobal() {
+            var sum = new double[4, 4];
+            for (int i = 0; i < 4; i++) {
+                var pc = UniversalElement.Points[i];
+                var factor = pc.WeightX * pc.WeightY * JacobianDeterminals[i];
+                var matrix = MatrixCalculations.MultiplyMatrix(HLocalMatrices[i], factor);
+                MatrixCalculations.AddMatrices(sum, matrix);
+            }
+
+            HGlobalMatrix = sum;
+        }
+        
+        
 
 
         public override string ToString() {
