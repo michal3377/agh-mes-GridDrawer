@@ -3,9 +3,7 @@ namespace MES_GridDrawer.FEM {
         public Element[] Elements;
         public Node[] Nodes;
 
-        public double[,] NValues = new double[4, 4];
-        public double[,] KsiValues = new double[4, 4];
-        public double[,] EtaValues = new double[4, 4];
+       
 
         private GlobalData _globalData;
 
@@ -48,43 +46,8 @@ namespace MES_GridDrawer.FEM {
             }
         }
 
-        public void CalculateMatrixes(UniversalElement universalElement) {
-            var Weights = universalElement.Weights;
-            var points = universalElement.IntegrationPoints;
+        
 
-            double eta = 0;
-            double ksi = 0;
-            for (int i = 0; i < 4; i++) {
-                if (i == 0) {
-                    ksi = points[0];
-                    eta = points[0];
-                } else if (i == 1) {
-                    ksi = points[1];
-                    eta = points[0];
-                } else if (i == 2) {
-                    ksi = points[0];
-                    eta = points[1];
-                } else if (i == 3) {
-                    ksi = points[1];
-                    eta = points[1];
-                }
-
-                NValues[i, 0] = (0.25 * (1 - ksi) * (1 - eta));
-                NValues[i, 1] = (0.25 * (1 + ksi) * (1 - eta));
-                NValues[i, 2] = (0.25 * (1 + ksi) * (1 + eta));
-                NValues[i, 3] = (0.25 * (1 - ksi) * (1 + eta));
-
-                KsiValues[i, 0] = (-0.25 * (1 - eta));
-                KsiValues[i, 1] = (0.25 * (1 - eta));
-                KsiValues[i, 2] = (0.25 * (1 + eta));
-                KsiValues[i, 3] = (-0.25 * (1 + eta));
-
-                EtaValues[i, 0] = (-0.25 * (1 - ksi));
-                EtaValues[i, 1] = (-0.25 * (1 + ksi));
-                EtaValues[i, 2] = (0.25 * (1 + ksi));
-                EtaValues[i, 3] = (0.25 * (1 - ksi));
-            }
-        }
 
         private void CreateElementsArray() {
             int index = 0;

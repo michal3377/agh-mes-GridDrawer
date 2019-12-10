@@ -51,6 +51,7 @@
     <Compile Include="FEM\GlobalData.cs" />
     <Compile Include="FEM\Grid.cs" />
     <Compile Include="FEM\Node.cs" />
+    <Compile Include="FEM\Point.cs" />
     <Compile Include="FEM\UniversalElement.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
