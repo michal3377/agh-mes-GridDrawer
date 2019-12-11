@@ -40,6 +40,8 @@ namespace MES_GridDrawer.FEM {
                         Id = index,
                         X = x,
                         Y = y,
+                        RealX = CalculateRealX(x),
+                        RealY = CalculateRealY(y),
                         BoundaryCondition = DetermineBoundaryCondition(x, y)
                     };
                     Nodes[index] = node;
@@ -76,7 +78,15 @@ namespace MES_GridDrawer.FEM {
             var topLeft = GetNodeAt(elementX, elementY + 1);
             var topRight = GetNodeAt(elementX + 1, elementY + 1);
             var bottomRight = GetNodeAt(elementX + 1, elementY);
-            return new[] {bottomLeft, topLeft, topRight, bottomRight};
+            return new[] {bottomLeft, bottomRight, topRight, topLeft};
+        }
+
+        private double CalculateRealX(int xIndex) {
+            return (_globalData.RealLength / _globalData.NodesLength) * xIndex;
+        }
+
+        private double CalculateRealY(int yIndex) {
+            return (_globalData.RealHeight / _globalData.NodesHeight) * yIndex;
         }
     }
 }

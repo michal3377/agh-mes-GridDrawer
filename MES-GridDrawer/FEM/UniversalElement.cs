@@ -14,7 +14,7 @@ namespace MES_GridDrawer.FEM {
         public IntegrationPoint[] Points;
         public int PointsCount;
         
-        // [ indeks punktu , wartosc ]
+        // [ indeks punktu , funkcja ksztaltu ]
         public double[,] NValuesMatrix, dNdKsiMatrix, dNdEtaMatrix;
 
         public UniversalElement(IntegrationPoint[] points) {

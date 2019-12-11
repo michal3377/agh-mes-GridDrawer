@@ -20,23 +20,37 @@ namespace MES_GridDrawer
         }
 
         private void btConstructGrid_Click(object sender, EventArgs e) {
-            int h = int.Parse(tbNodesHeight.Text);
-            int l = int.Parse(tbNodesLength.Text);
-            var data = new GlobalData {
-                NodesHeight = h,
-                NodesLength = l
-            };
-            _grid = new Grid(data);
-            _grid.ConstructGrid();
-            btGetElementInfo.Enabled = true;
+            try {
+                double rH = double.Parse(tbNodesRealHeight.Text.Replace('.',','));
+                double rL = double.Parse(tbNodesRealLength.Text.Replace('.',','));
+                int h = int.Parse(tbNodesHeight.Text);
+                int l = int.Parse(tbNodesLength.Text);
+                var data = new GlobalData {
+                    NodesHeight = h,
+                    NodesLength = l,
+                    RealHeight = rH,
+                    RealLength = rL
+                };
+                _grid = new Grid(data);
+                _grid.ConstructGrid();
+                btGetElementInfo.Enabled = true;
+            } catch (Exception exception) {
+                MessageBox.Show(exception.Message);
+            }
+            
+            
         }
 
         private void btGetElementInfo_Click(object sender, EventArgs e) {
             if(_grid == null) return;
-            int id = int.Parse(tbElementId.Text);
-            var element = _grid.Elements[id];
-            element.CalculateMatrices();
-            tbElementInfo.Text += $"{element}{Environment.NewLine}";
+            try {
+                int id = int.Parse(tbElementId.Text);
+                var element = _grid.Elements[id];
+                element.CalculateMatrices();
+                tbElementInfo.Text += $"{element}{Environment.NewLine}";
+            } catch (Exception exception) {
+                MessageBox.Show(exception.Message);
+            }
         }
     }
 }

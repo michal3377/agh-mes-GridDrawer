@@ -72,27 +72,27 @@ namespace MES_GridDrawer.FEM {
                 var jacobian = Jacobians[i];
                 //[↓ →] 
                 //dx/dksi
-                jacobian[0, 0] = UniversalElement.dNdKsiMatrix[i, 0] * Nodes[0].X +
-                                 UniversalElement.dNdKsiMatrix[i, 1] * Nodes[1].X +
-                                 UniversalElement.dNdKsiMatrix[i, 2] * Nodes[2].X +
-                                 UniversalElement.dNdKsiMatrix[i, 3] * Nodes[3].X;
+                jacobian[0, 0] = UniversalElement.dNdKsiMatrix[i, 0] * Nodes[0].RealX +
+                                 UniversalElement.dNdKsiMatrix[i, 1] * Nodes[1].RealX +
+                                 UniversalElement.dNdKsiMatrix[i, 2] * Nodes[2].RealX +
+                                 UniversalElement.dNdKsiMatrix[i, 3] * Nodes[3].RealX;
                 
                 //dy/dksi
-                jacobian[0, 1] = UniversalElement.dNdKsiMatrix[i, 0] * Nodes[0].Y +
-                                 UniversalElement.dNdKsiMatrix[i, 1] * Nodes[1].Y +
-                                 UniversalElement.dNdKsiMatrix[i, 2] * Nodes[2].Y +
-                                 UniversalElement.dNdKsiMatrix[i, 3] * Nodes[3].Y;
+                jacobian[0, 1] = UniversalElement.dNdKsiMatrix[i, 0] * Nodes[0].RealY +
+                                 UniversalElement.dNdKsiMatrix[i, 1] * Nodes[1].RealY +
+                                 UniversalElement.dNdKsiMatrix[i, 2] * Nodes[2].RealY +
+                                 UniversalElement.dNdKsiMatrix[i, 3] * Nodes[3].RealY;
                 // dx/deta
-                jacobian[1, 0] = UniversalElement.dNdEtaMatrix[i, 0] * Nodes[0].X +
-                                 UniversalElement.dNdEtaMatrix[i, 1] * Nodes[1].X +
-                                 UniversalElement.dNdEtaMatrix[i, 2] * Nodes[2].X +
-                                 UniversalElement.dNdEtaMatrix[i, 3] * Nodes[3].X;
+                jacobian[1, 0] = UniversalElement.dNdEtaMatrix[i, 0] * Nodes[0].RealX +
+                                 UniversalElement.dNdEtaMatrix[i, 1] * Nodes[1].RealX +
+                                 UniversalElement.dNdEtaMatrix[i, 2] * Nodes[2].RealX +
+                                 UniversalElement.dNdEtaMatrix[i, 3] * Nodes[3].RealX;
                 
                 // dy/deta
-                jacobian[1, 1] = UniversalElement.dNdEtaMatrix[i, 0] * Nodes[0].Y +
-                                 UniversalElement.dNdEtaMatrix[i, 1] * Nodes[1].Y +
-                                 UniversalElement.dNdEtaMatrix[i, 2] * Nodes[2].Y +
-                                 UniversalElement.dNdEtaMatrix[i, 3] * Nodes[3].Y;
+                jacobian[1, 1] = UniversalElement.dNdEtaMatrix[i, 0] * Nodes[0].RealY +
+                                 UniversalElement.dNdEtaMatrix[i, 1] * Nodes[1].RealY +
+                                 UniversalElement.dNdEtaMatrix[i, 2] * Nodes[2].RealY +
+                                 UniversalElement.dNdEtaMatrix[i, 3] * Nodes[3].RealY;
 
                 JacobianDeterminals[i] = jacobian[0, 0] * jacobian[1, 1] - jacobian[0, 1] * jacobian[1, 0];
             }

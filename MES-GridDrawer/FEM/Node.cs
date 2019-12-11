@@ -2,6 +2,7 @@ namespace MES_GridDrawer.FEM {
     public class Node {
         public int Id;
         public int X, Y;
+        public double RealX, RealY;
         public double Value; //t
         public int BoundaryCondition;
 
