@@ -1,7 +1,7 @@
 using System;
 
 namespace MES_GridDrawer.Utils {
-    public class MatrixCalculations {
+    public class MatrixUtils {
         
         public static double[,] MultiplyMatrices(double[,] m1, double[,] m2) {
             int hA = m1.GetLength(0);
@@ -47,7 +47,7 @@ namespace MES_GridDrawer.Utils {
             if(hA != hB || wA != wB)  throw new ArgumentException("Can't add matrices");
             double[,] result = new double[hA, wB];
             for (int i = 0; i < hA; i++) {
-                for (int j = 0; j < wB; j++) {
+                for (int j = 0; j < wA; j++) {
                     result[i, j] = m1[i,j] + m2[i, j];
                 }
             }

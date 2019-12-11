@@ -35,6 +35,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.tbElementInfo = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btConstructGrid
@@ -53,6 +54,7 @@
             this.tbNodesHeight.Name = "tbNodesHeight";
             this.tbNodesHeight.Size = new System.Drawing.Size(149, 23);
             this.tbNodesHeight.TabIndex = 1;
+            this.tbNodesHeight.Text = "6";
             // 
             // tbNodesLength
             // 
@@ -60,6 +62,7 @@
             this.tbNodesLength.Name = "tbNodesLength";
             this.tbNodesLength.Size = new System.Drawing.Size(149, 23);
             this.tbNodesLength.TabIndex = 1;
+            this.tbNodesLength.Text = "4";
             // 
             // tbElementId
             // 
@@ -104,11 +107,21 @@
             this.label3.TabIndex = 2;
             this.label3.Text = "Element Id:";
             // 
+            // tbElementInfo
+            // 
+            this.tbElementInfo.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbElementInfo.Location = new System.Drawing.Point(285, 68);
+            this.tbElementInfo.Multiline = true;
+            this.tbElementInfo.Name = "tbElementInfo";
+            this.tbElementInfo.Size = new System.Drawing.Size(266, 292);
+            this.tbElementInfo.TabIndex = 3;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(321, 362);
+            this.ClientSize = new System.Drawing.Size(553, 362);
+            this.Controls.Add(this.tbElementInfo);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -133,6 +146,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox tbElementInfo;
     }
 }
 

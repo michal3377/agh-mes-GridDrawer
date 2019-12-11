@@ -3,14 +3,16 @@ namespace MES_GridDrawer.FEM {
         public Element[] Elements;
         public Node[] Nodes;
 
-       
-
+        public UniversalElement UniversalElement;
+        
         private GlobalData _globalData;
 
         public Grid(GlobalData globalData) {
             _globalData = globalData;
             Elements = new Element[globalData.ElementsCount];
             Nodes = new Node[globalData.NodesCount];
+            
+            UniversalElement = UniversalElement.CreateDefault2Point();
         }
 
         public void ConstructGrid() {
@@ -53,12 +55,7 @@ namespace MES_GridDrawer.FEM {
             int index = 0;
             for (int x = 0; x < _globalData.NodesLength - 1; x++) {
                 for (int y = 0; y < _globalData.NodesHeight - 1; y++) {
-                    var element = new Element {
-                        Id = index,
-                        X = x,
-                        Y = y,
-                        Nodes = FindElementNodes(x, y)
-                    };
+                    var element = new Element(index, x, y, FindElementNodes(x, y), UniversalElement);
                     Elements[index] = element;
                     index++;
                 }

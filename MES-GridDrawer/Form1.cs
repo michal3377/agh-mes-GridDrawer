@@ -35,7 +35,8 @@ namespace MES_GridDrawer
             if(_grid == null) return;
             int id = int.Parse(tbElementId.Text);
             var element = _grid.Elements[id];
-            MessageBox.Show(element.ToString());
+            element.CalculateMatrices();
+            tbElementInfo.Text += $"{element}{Environment.NewLine}";
         }
     }
 }
