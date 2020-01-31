@@ -6,7 +6,10 @@ namespace MES_GridDrawer.FEM {
         public int NodesHeight; //nH
         public int NodesLength; //nL
 
+        public int ElementsHeight => NodesHeight - 1;
+        public int ElementsLength => NodesLength - 1;
+
         public int NodesCount => NodesHeight * NodesLength;
-        public int ElementsCount => (NodesHeight - 1) * (NodesLength - 1);
+        public int ElementsCount => ElementsHeight * ElementsLength;
     }
 }

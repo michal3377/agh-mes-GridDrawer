@@ -9,7 +9,7 @@ namespace MES_GridDrawer.FEM {
         public bool IsBoundary => BoundaryCondition != 0;
         
         public override string ToString() {
-            return $"Node {Id} ({X}, {Y}): Val={Value} BC={BoundaryCondition}";
+            return $"Node {Id} ({RealX}, {RealY}): Val={Value} BC={BoundaryCondition}";
         }
     }
 }

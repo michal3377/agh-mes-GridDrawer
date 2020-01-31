@@ -82,11 +82,11 @@ namespace MES_GridDrawer.FEM {
         }
 
         private double CalculateRealX(int xIndex) {
-            return (_globalData.RealLength / _globalData.NodesLength) * xIndex;
+            return (_globalData.RealLength / _globalData.ElementsLength) * xIndex;
         }
 
         private double CalculateRealY(int yIndex) {
-            return (_globalData.RealHeight / _globalData.NodesHeight) * yIndex;
+            return (_globalData.RealHeight / _globalData.ElementsHeight) * yIndex;
         }
     }
 }

@@ -66,7 +66,7 @@
             this.tbNodesLength.Name = "tbNodesLength";
             this.tbNodesLength.Size = new System.Drawing.Size(149, 23);
             this.tbNodesLength.TabIndex = 1;
-            this.tbNodesLength.Text = "3";
+            this.tbNodesLength.Text = "5";
             // 
             // tbElementId
             // 
@@ -74,6 +74,7 @@
             this.tbElementId.Name = "tbElementId";
             this.tbElementId.Size = new System.Drawing.Size(149, 23);
             this.tbElementId.TabIndex = 1;
+            this.tbElementId.Text = "0";
             // 
             // btGetElementInfo
             // 
@@ -127,7 +128,7 @@
             this.tbNodesRealHeight.Name = "tbNodesRealHeight";
             this.tbNodesRealHeight.Size = new System.Drawing.Size(149, 23);
             this.tbNodesRealHeight.TabIndex = 1;
-            this.tbNodesRealHeight.Text = "1.5";
+            this.tbNodesRealHeight.Text = "0.1";
             // 
             // tbNodesRealLength
             // 
@@ -135,7 +136,7 @@
             this.tbNodesRealLength.Name = "tbNodesRealLength";
             this.tbNodesRealLength.Size = new System.Drawing.Size(149, 23);
             this.tbNodesRealLength.TabIndex = 1;
-            this.tbNodesRealLength.Text = "0.5";
+            this.tbNodesRealLength.Text = "0.1";
             // 
             // label4
             // 

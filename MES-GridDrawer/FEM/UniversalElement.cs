@@ -14,20 +14,20 @@ namespace MES_GridDrawer.FEM {
         public IntegrationPoint[] Points;
         public int PointsCount;
         
-        // [ indeks punktu , funkcja ksztaltu ]
-        public double[][] NValuesMatrix, dNdKsiMatrix, dNdEtaMatrix;
+        // [ indeks punktu ] [ funkcja ksztaltu ]
+        public double[][] NValues, dNdKsiValues, dNdEtaValues;
 
         public UniversalElement(IntegrationPoint[] points) {
             Points = points;
             PointsCount = points.Length;
 
-            NValuesMatrix = new double[PointsCount][];
-            dNdKsiMatrix = new double[PointsCount][];
-            dNdEtaMatrix = new double[PointsCount][];
+            NValues = new double[PointsCount][];
+            dNdKsiValues = new double[PointsCount][];
+            dNdEtaValues = new double[PointsCount][];
             for (int i = 0; i < PointsCount; i++) {
-                NValuesMatrix[i] = new double[4];
-                dNdKsiMatrix[i] = new double[4];
-                dNdEtaMatrix[i] = new double[4];
+                NValues[i] = new double[4];
+                dNdKsiValues[i] = new double[4];
+                dNdEtaValues[i] = new double[4];
             }
             CalculateMatrices();
         }
@@ -37,24 +37,24 @@ namespace MES_GridDrawer.FEM {
                 var ksi = Points[i].Ksi;
                 var eta = Points[i].Eta;
 
-                NValuesMatrix[i][0] = 0.25 * (1 - ksi) * (1 - eta);
-                NValuesMatrix[i][1] = 0.25 * (1 + ksi) * (1 - eta);
-                NValuesMatrix[i][2] = 0.25 * (1 + ksi) * (1 + eta);
-                NValuesMatrix[i][3] = 0.25 * (1 - ksi) * (1 + eta);
+                NValues[i][0] = 0.25 * (1 - ksi) * (1 - eta);
+                NValues[i][1] = 0.25 * (1 + ksi) * (1 - eta);
+                NValues[i][2] = 0.25 * (1 + ksi) * (1 + eta);
+                NValues[i][3] = 0.25 * (1 - ksi) * (1 + eta);
 
-                dNdKsiMatrix[i][0] = -0.25 * (1 - eta);
-                dNdKsiMatrix[i][1] = 0.25 * (1 - eta);
-                dNdKsiMatrix[i][2] = 0.25 * (1 + eta);
-                dNdKsiMatrix[i][3] = -0.25 * (1 + eta);
+                dNdKsiValues[i][0] = -0.25 * (1 - eta);
+                dNdKsiValues[i][1] = 0.25 * (1 - eta);
+                dNdKsiValues[i][2] = 0.25 * (1 + eta);
+                dNdKsiValues[i][3] = -0.25 * (1 + eta);
 
-                dNdEtaMatrix[i][0] = -0.25 * (1 - ksi);
-                dNdEtaMatrix[i][1] = -0.25 * (1 + ksi);
-                dNdEtaMatrix[i][2] = 0.25 * (1 + ksi);
-                dNdEtaMatrix[i][3] = 0.25 * (1 - ksi);
+                dNdEtaValues[i][0] = -0.25 * (1 - ksi);
+                dNdEtaValues[i][1] = -0.25 * (1 + ksi);
+                dNdEtaValues[i][2] = 0.25 * (1 + ksi);
+                dNdEtaValues[i][3] = 0.25 * (1 - ksi);
             }
-            NValuesMatrix.Round();
-            dNdKsiMatrix.Round();
-            dNdEtaMatrix.Round();
+            NValues.Round();
+            dNdKsiValues.Round();
+            dNdEtaValues.Round();
         }
         
         /// <summary>

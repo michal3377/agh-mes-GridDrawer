@@ -19,6 +19,7 @@ namespace MES_GridDrawer.FEM {
 
         public double[][,] HLocalMatrixPerPoint;
         public double[,] HLocalMatrix;
+        public double[,] CLocalMatrix;
 
         public Element(int id, int x, int y, Node[] nodes, UniversalElement universalElement) {
             Id = id;
@@ -38,6 +39,7 @@ namespace MES_GridDrawer.FEM {
             
             HLocalMatrixPerPoint = new double[pcCount][,];
             HLocalMatrix = new double[4,4]; 
+            CLocalMatrix = new double[4,4]; 
             
             for (int i = 0; i < pcCount; i++) {
                 Jacobians[i] = new double[2,2];
@@ -50,7 +52,8 @@ namespace MES_GridDrawer.FEM {
         public void CalculateMatrices() {
             CalculateJacobians();
             TransformJacobians();
-            CalculateHLocal();
+            CalculateHLocal(30);
+            CalculateCLocal(700, 7800);
             RoundMatrices();
         }
 
@@ -71,27 +74,27 @@ namespace MES_GridDrawer.FEM {
                 var jacobian = Jacobians[i];
                 //[↓ →] 
                 //dx/dksi
-                jacobian[0, 0] = UniversalElement.dNdKsiMatrix[i][0] * Nodes[0].RealX +
-                                 UniversalElement.dNdKsiMatrix[i][1] * Nodes[1].RealX +
-                                 UniversalElement.dNdKsiMatrix[i][2] * Nodes[2].RealX +
-                                 UniversalElement.dNdKsiMatrix[i][3] * Nodes[3].RealX;
+                jacobian[0, 0] = UniversalElement.dNdKsiValues[i][0] * Nodes[0].RealX +
+                                 UniversalElement.dNdKsiValues[i][1] * Nodes[1].RealX +
+                                 UniversalElement.dNdKsiValues[i][2] * Nodes[2].RealX +
+                                 UniversalElement.dNdKsiValues[i][3] * Nodes[3].RealX;
                 
                 //dy/dksi
-                jacobian[0, 1] = UniversalElement.dNdKsiMatrix[i][0] * Nodes[0].RealY +
-                                 UniversalElement.dNdKsiMatrix[i][1] * Nodes[1].RealY +
-                                 UniversalElement.dNdKsiMatrix[i][2] * Nodes[2].RealY +
-                                 UniversalElement.dNdKsiMatrix[i][3] * Nodes[3].RealY;
+                jacobian[0, 1] = UniversalElement.dNdKsiValues[i][0] * Nodes[0].RealY +
+                                 UniversalElement.dNdKsiValues[i][1] * Nodes[1].RealY +
+                                 UniversalElement.dNdKsiValues[i][2] * Nodes[2].RealY +
+                                 UniversalElement.dNdKsiValues[i][3] * Nodes[3].RealY;
                 // dx/deta
-                jacobian[1, 0] = UniversalElement.dNdEtaMatrix[i][0] * Nodes[0].RealX +
-                                 UniversalElement.dNdEtaMatrix[i][1] * Nodes[1].RealX +
-                                 UniversalElement.dNdEtaMatrix[i][2] * Nodes[2].RealX +
-                                 UniversalElement.dNdEtaMatrix[i][3] * Nodes[3].RealX;
+                jacobian[1, 0] = UniversalElement.dNdEtaValues[i][0] * Nodes[0].RealX +
+                                 UniversalElement.dNdEtaValues[i][1] * Nodes[1].RealX +
+                                 UniversalElement.dNdEtaValues[i][2] * Nodes[2].RealX +
+                                 UniversalElement.dNdEtaValues[i][3] * Nodes[3].RealX;
                 
                 // dy/deta
-                jacobian[1, 1] = UniversalElement.dNdEtaMatrix[i][0] * Nodes[0].RealY +
-                                 UniversalElement.dNdEtaMatrix[i][1] * Nodes[1].RealY +
-                                 UniversalElement.dNdEtaMatrix[i][2] * Nodes[2].RealY +
-                                 UniversalElement.dNdEtaMatrix[i][3] * Nodes[3].RealY;
+                jacobian[1, 1] = UniversalElement.dNdEtaValues[i][0] * Nodes[0].RealY +
+                                 UniversalElement.dNdEtaValues[i][1] * Nodes[1].RealY +
+                                 UniversalElement.dNdEtaValues[i][2] * Nodes[2].RealY +
+                                 UniversalElement.dNdEtaValues[i][3] * Nodes[3].RealY;
 
                 JacobianDeterminals[i] = jacobian[0, 0] * jacobian[1, 1] - jacobian[0, 1] * jacobian[1, 0];
             }
@@ -110,20 +113,20 @@ namespace MES_GridDrawer.FEM {
         private double CalculateDnDx(int pointIndex, int nIndex) {
             //nIndex - numer funkcji ksztaltu
             return 1 / JacobianDeterminals[pointIndex] * (TransformedJacobians[pointIndex][0, 0] 
-                                                          * UniversalElement.dNdKsiMatrix[pointIndex][nIndex]
+                                                          * UniversalElement.dNdKsiValues[pointIndex][nIndex]
                                                           + TransformedJacobians[pointIndex][0, 1] *
-                                                          UniversalElement.dNdEtaMatrix[pointIndex][nIndex]);
+                                                          UniversalElement.dNdEtaValues[pointIndex][nIndex]);
         }
         
         private double CalculateDnDy(int pointIndex, int nIndex) {
             //nIndex - numer funkcji ksztaltu
             return 1 / JacobianDeterminals[pointIndex] * (TransformedJacobians[pointIndex][1, 0] 
-                                                          * UniversalElement.dNdKsiMatrix[pointIndex][ nIndex]
+                                                          * UniversalElement.dNdKsiValues[pointIndex][ nIndex]
                                                           + TransformedJacobians[pointIndex][1, 1] *
-                                                          UniversalElement.dNdEtaMatrix[pointIndex][nIndex]);
+                                                          UniversalElement.dNdEtaValues[pointIndex][nIndex]);
         }
 
-        private void CalculateHLocal() {
+        private void CalculateHLocal(double conductivity) {
             //H local per point:
             for (int i = 0; i < UniversalElement.PointsCount; i++) {
                 var dNdX = new[] {
@@ -154,12 +157,26 @@ namespace MES_GridDrawer.FEM {
             var sum = new double[4, 4];
             for (int i = 0; i < UniversalElement.PointsCount; i++) {
                 var pc = UniversalElement.Points[i];
-                var factor = pc.WeightKsi * pc.WeightEta * JacobianDeterminals[i];
+                var factor = pc.WeightKsi * pc.WeightEta * JacobianDeterminals[i] * conductivity;
                 var matrix = MatrixUtils.MultiplyMatrix(HLocalMatrixPerPoint[i], factor);
                 sum = MatrixUtils.AddMatrices(sum, matrix);
             }
 
             HLocalMatrix = sum;
+        }
+        
+        private void CalculateCLocal(double c, double ro) {
+            //H local per point:
+            for (int i = 0; i < UniversalElement.PointsCount; i++) {
+                var NValues = UniversalElement.NValues[i].ToMatrix();
+                var NValuesT = UniversalElement.NValues[i].Transpose();
+
+                var NxN = MatrixUtils.MultiplyMatrices(NValues, NValuesT);
+                var pc = UniversalElement.Points[i];
+                var factor = pc.WeightKsi * pc.WeightEta * JacobianDeterminals[i] * c * ro;
+                var cPartial = MatrixUtils.MultiplyMatrix(NxN, factor);
+                CLocalMatrix = MatrixUtils.AddMatrices(CLocalMatrix, cPartial);
+            }
         }
 
         public override string ToString() {
@@ -173,8 +190,8 @@ namespace MES_GridDrawer.FEM {
                 str += $"{nl} Jacobian [{i}]: {Jacobians[i].ToStringMatrix()}";
             str +=
                    $"{nl} Wyznaczniki: {JacobianDeterminals.ToStringVector()}" +
-                   $"{nl} Macierz H lokalna[0]: {HLocalMatrixPerPoint[0].ToStringMatrix()}" +
-                   $"{nl} Macierz H globalna: {HLocalMatrix.ToStringMatrix()}";
+                   $"{nl} Macierz H lokalna: {HLocalMatrix.ToStringMatrix()}" +
+                   $"{nl} Macierz C lokalna: {CLocalMatrix.ToStringMatrix()}";
             return str;
         }
     }
