@@ -219,7 +219,7 @@ namespace MES_GridDrawer.FEM {
         private double CalculateEdgeJacobian1DDeterminal(int edgeIndex) {
             //  realLength / localLength
             var start = Nodes[edgeIndex];
-            var end = Nodes[(edgeIndex + 1) % UniversalElement.PointsCount];
+            var end = Nodes[(edgeIndex + 1) % ELEMENT_NODES_COUNT];
             var realLength = Util.CalculateEdgeLength(start.RealX, start.RealY, end.RealX, end.RealY);
             return realLength / 2d;
         }

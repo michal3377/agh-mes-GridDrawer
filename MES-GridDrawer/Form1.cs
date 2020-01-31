@@ -75,7 +75,9 @@ namespace MES_GridDrawer
 
         private async void btSimulate_Click(object sender, EventArgs e) {
             var stepTime = 1d;
+//            var stepTime = 50d;
             var time = 100d;
+//            var time = 500d;
             
             var dof = _grid.Nodes.Length;
             var initTempVector = new double[dof, 1];

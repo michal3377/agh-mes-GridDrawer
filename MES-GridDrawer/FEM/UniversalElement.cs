@@ -106,8 +106,34 @@ namespace MES_GridDrawer.FEM {
                 new[] {
                     new IntegrationPoint(p1, p1, 1, 1), //lewy dolny
                     new IntegrationPoint(p2, p1, 1, 1), //prawy dolny
+                    new IntegrationPoint(p1, p2, 1, 1),  //lewy gorny
                     new IntegrationPoint(p2, p2, 1, 1), //prawy gorny
-                    new IntegrationPoint(p1, p2, 1, 1)  //lewy gorny
+                }
+            );
+            return element;
+        }     
+        
+
+        public static UniversalElement CreateDefault3Point() {
+            double p1 = -Math.Sqrt(3 / 5d);
+            double p2 = 0;
+            double p3 = Math.Sqrt(3 / 5d);
+            double w1 = 5 / 9d;
+            double w2 = 8 / 9d;
+            double w3 = 5 / 9d;
+            var element = new UniversalElement(
+                new[] {
+                    new IntegrationPoint(p1, p1, w1, w1),
+                    new IntegrationPoint(p2, p1, w2, w1),
+                    new IntegrationPoint(p3, p1, w3, w1),
+                    
+                    new IntegrationPoint(p1, p2, w1, w2),
+                    new IntegrationPoint(p2, p2, w2, w2),
+                    new IntegrationPoint(p3, p2, w3, w2),
+                    
+                    new IntegrationPoint(p1, p3, w1, w3),
+                    new IntegrationPoint(p2, p3, w2, w3),
+                    new IntegrationPoint(p3, p3, w3, w3),
                 }
             );
             return element;
