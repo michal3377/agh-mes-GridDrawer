@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MES_GridDrawer.FEM;
 
+//#define CATCH_EXC
+
 namespace MES_GridDrawer
 {
     public partial class Form1 : Form {
@@ -43,14 +45,18 @@ namespace MES_GridDrawer
 
         private void btGetElementInfo_Click(object sender, EventArgs e) {
             if(_grid == null) return;
-            try {
+#if CATCH_EXC
+            try {    
+#endif 
                 int id = int.Parse(tbElementId.Text);
                 var element = _grid.Elements[id];
                 element.CalculateMatrices();
                 tbElementInfo.Text += $"{element}{Environment.NewLine}";
+#if CATCH_EXC
             } catch (Exception exception) {
                 MessageBox.Show(exception.Message);
             }
+#endif
         }
     }
 }

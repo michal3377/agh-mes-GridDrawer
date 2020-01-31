@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using MES_GridDrawer.Utils;
 
 namespace MES_GridDrawer.FEM {
@@ -37,10 +38,7 @@ namespace MES_GridDrawer.FEM {
                 var ksi = Points[i].Ksi;
                 var eta = Points[i].Eta;
 
-                NValues[i][0] = 0.25 * (1 - ksi) * (1 - eta);
-                NValues[i][1] = 0.25 * (1 + ksi) * (1 - eta);
-                NValues[i][2] = 0.25 * (1 + ksi) * (1 + eta);
-                NValues[i][3] = 0.25 * (1 - ksi) * (1 + eta);
+                NValues[i] = CalculateNValues(Points[i]);
 
                 dNdKsiValues[i][0] = -0.25 * (1 - eta);
                 dNdKsiValues[i][1] = 0.25 * (1 - eta);
@@ -55,6 +53,45 @@ namespace MES_GridDrawer.FEM {
             NValues.Round();
             dNdKsiValues.Round();
             dNdEtaValues.Round();
+        }
+
+        public double[] CalculateNValues(IntegrationPoint point) {
+            return new[] {
+                CalculateNValue(point, 0),
+                CalculateNValue(point, 1),
+                CalculateNValue(point, 2),
+                CalculateNValue(point, 3)
+            };
+        }
+        
+        private double CalculateNValue(IntegrationPoint point, int NIndex) {
+            if(NIndex == 0) return 0.25 * (1 - point.Ksi) * (1 - point.Eta);
+            if(NIndex == 1) return 0.25 * (1 + point.Ksi) * (1 - point.Eta);
+            if(NIndex == 2) return 0.25 * (1 + point.Ksi) * (1 + point.Eta);
+            return 0.25 * (1 - point.Ksi) * (1 + point.Eta);
+        }
+
+        public IntegrationPoint[] GetIntegrationPointsProjectedOntoEdge(int edgeIndex) {
+            int pointsCountForEdge = Math.Round(Math.Sqrt(PointsCount)).ToInt();
+            var points = new List<IntegrationPoint>();
+            for (int i = 0; i < pointsCountForEdge; i++) {
+
+                if (edgeIndex == 0 || edgeIndex == 2) {
+                    //horizontal
+                    var point = Points[i];
+                    var eta = edgeIndex == 0 ? -1 : 1;
+                    var projected = new IntegrationPoint(point.Ksi, eta, point.WeightKsi, point.WeightEta);
+                    points.Add(projected);
+                } else {
+                    //vertical
+                    var point = Points[i * pointsCountForEdge];
+                    var ksi = edgeIndex == 3 ? -1 : 1;
+                    var projected = new IntegrationPoint(ksi, point.Eta, point.WeightKsi, point.WeightEta);
+                    points.Add(projected);
+                }
+            }
+
+            return points.ToArray();
         }
         
         /// <summary>

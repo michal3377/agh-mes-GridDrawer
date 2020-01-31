@@ -2,6 +2,11 @@ using System;
 
 namespace MES_GridDrawer.Utils {
     public static class Extensions {
+
+        public static int ToInt(this double val) {
+            return Convert.ToInt32(val);
+        }
+        
         public static double[,] Transpose(this double[] vect) {
             var result = new double[1, vect.Length];
             for (var i = 0; i < vect.Length; i++) {
@@ -69,6 +74,10 @@ namespace MES_GridDrawer.Utils {
             }
 
             return str + "}";
+        }
+
+        public static double Pow(this double val, int power) {
+            return Math.Pow(val, power);
         }
     }
 }

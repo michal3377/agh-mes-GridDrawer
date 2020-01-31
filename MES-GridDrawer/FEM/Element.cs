@@ -19,6 +19,7 @@ namespace MES_GridDrawer.FEM {
 
         public double[][,] HLocalMatrixPerPoint;
         public double[,] HLocalMatrix;
+        public double[,] HBcLocalMatrix;
         public double[,] CLocalMatrix;
 
         public Element(int id, int x, int y, Node[] nodes, UniversalElement universalElement) {
@@ -39,6 +40,7 @@ namespace MES_GridDrawer.FEM {
             
             HLocalMatrixPerPoint = new double[pcCount][,];
             HLocalMatrix = new double[4,4]; 
+            HBcLocalMatrix = new double[4,4]; 
             CLocalMatrix = new double[4,4]; 
             
             for (int i = 0; i < pcCount; i++) {
@@ -54,6 +56,7 @@ namespace MES_GridDrawer.FEM {
             TransformJacobians();
             CalculateHLocal(30);
             CalculateCLocal(700, 7800);
+            CalculateHBcLocal(25);
             RoundMatrices();
         }
 
@@ -177,6 +180,38 @@ namespace MES_GridDrawer.FEM {
                 var cPartial = MatrixUtils.MultiplyMatrix(NxN, factor);
                 CLocalMatrix = MatrixUtils.AddMatrices(CLocalMatrix, cPartial);
             }
+        }      
+        
+        private void CalculateHBcLocal(int alpha) {
+
+            for (int i = 0; i < ELEMENT_NODES_COUNT; i++) {
+                var current = Nodes[i];
+                var next = Nodes[(i + 1) % ELEMENT_NODES_COUNT];
+                if (current.IsBoundary && next.IsBoundary) {
+                    //boundary edge
+                    int edgeIndex = i;
+                    var jacobianDet = CalculateEdgeJacobian1DDeterminal(edgeIndex);
+                    var pointsProjectedOntoEdge = UniversalElement.GetIntegrationPointsProjectedOntoEdge(edgeIndex);
+                    for (int j = 0; j < pointsProjectedOntoEdge.Length; j++) {
+                        var point = pointsProjectedOntoEdge[j];
+                        var NValues = UniversalElement.CalculateNValues(point);
+                        var NValuesT = NValues.Transpose();
+                        
+                        var NxN = MatrixUtils.MultiplyMatrices(NValues.ToMatrix(), NValuesT);
+                        var factor = point.WeightKsi * point.WeightEta * jacobianDet * alpha;
+                        var HBcPartial = MatrixUtils.MultiplyMatrix(NxN, factor);
+                        HBcLocalMatrix = MatrixUtils.AddMatrices(HBcLocalMatrix, HBcPartial);
+                    }
+                }
+            }
+        }
+
+        private double CalculateEdgeJacobian1DDeterminal(int edgeIndex) {
+            //  realLength / localLength
+            var start = Nodes[edgeIndex];
+            var end = Nodes[(edgeIndex + 1) % UniversalElement.PointsCount];
+            var realLength = Util.CalculateEdgeLength(start.RealX, start.RealY, end.RealX, end.RealY);
+            return realLength / 2d;
         }
 
         public override string ToString() {
@@ -191,6 +226,7 @@ namespace MES_GridDrawer.FEM {
             str +=
                    $"{nl} Wyznaczniki: {JacobianDeterminals.ToStringVector()}" +
                    $"{nl} Macierz H lokalna: {HLocalMatrix.ToStringMatrix()}" +
+                   $"{nl} Macierz HBc lokalna: {HBcLocalMatrix.ToStringMatrix()}" +
                    $"{nl} Macierz C lokalna: {CLocalMatrix.ToStringMatrix()}";
             return str;
         }
