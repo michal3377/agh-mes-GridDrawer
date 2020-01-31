@@ -45,6 +45,16 @@ namespace MES_GridDrawer.Utils {
                 }
             }
         }
+        
+        public static void Round(this double[][] matrix) {
+            int hA = matrix.Length;
+            for (int i = 0; i < hA; i++) {
+                int wA = matrix[i].Length;
+                for (int j = 0; j < wA; j++) {
+                    matrix[i][j] = Math.Round(matrix[i][j], 5);
+                }
+            }
+        }
 
         public static void Round(this double[] vector) {
             for (int i = 0; i < vector.Length; i++) {
