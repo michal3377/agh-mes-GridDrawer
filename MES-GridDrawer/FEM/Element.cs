@@ -5,7 +5,8 @@ namespace MES_GridDrawer.FEM {
     public class Element {
 
         public const int ELEMENT_NODES_COUNT = 4;
-        
+
+        private GlobalData _globalData;
         public int Id;
         public int X, Y;
         
@@ -23,12 +24,13 @@ namespace MES_GridDrawer.FEM {
         public double[,] CLocalMatrix;
         public double[,] PVector;
 
-        public Element(int id, int x, int y, Node[] nodes, UniversalElement universalElement) {
+        public Element(int id, int x, int y, Node[] nodes, UniversalElement universalElement, GlobalData globalData) {
             Id = id;
             X = x;
             Y = y;
             Nodes = nodes;
             UniversalElement = universalElement;
+            _globalData = globalData;
             Init();
         }
 
@@ -56,9 +58,9 @@ namespace MES_GridDrawer.FEM {
         public void CalculateMatrices() {
             CalculateJacobians();
             TransformJacobians();
-            CalculateHLocal(30);
-            CalculateCLocal(700, 7800);
-            CalculateBoundaryConditions(25, 1200);
+            CalculateHLocal(_globalData.Conductivity);
+            CalculateCLocal(_globalData.SpecificHeat, _globalData.Density);
+            CalculateBoundaryConditions(_globalData.Alpha, _globalData.AmbientTemperature);
             RoundMatrices();
         }
 
@@ -184,7 +186,7 @@ namespace MES_GridDrawer.FEM {
             }
         }      
         
-        private void CalculateBoundaryConditions(int alpha, double ambientTemperature) {
+        private void CalculateBoundaryConditions(double alpha, double ambientTemperature) {
 
             for (int i = 0; i < ELEMENT_NODES_COUNT; i++) {
                 var current = Nodes[i];

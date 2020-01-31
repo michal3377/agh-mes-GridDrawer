@@ -11,5 +11,13 @@ namespace MES_GridDrawer.FEM {
 
         public int NodesCount => NodesHeight * NodesLength;
         public int ElementsCount => ElementsHeight * ElementsLength;
+
+        public double AmbientTemperature;
+        public double Alpha;
+        public double SpecificHeat;
+        public double Conductivity;
+        public double Density;
+        public double InitialTemperature;
+
     }
 }

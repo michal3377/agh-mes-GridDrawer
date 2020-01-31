@@ -10,6 +10,8 @@ namespace MES_GridDrawer.FEM {
         private GlobalData _globalData;
 
         public double[,] HGlobalMatrix; 
+        public double[,] CGlobalMatrix; 
+        public double[,] PGlobalVector; 
 
         public Grid(GlobalData globalData) {
             _globalData = globalData;
@@ -20,6 +22,8 @@ namespace MES_GridDrawer.FEM {
 
             int dof = Nodes.Length;
             HGlobalMatrix = new double[dof, dof];
+            CGlobalMatrix = new double[dof, dof];
+            PGlobalVector = new double[dof, 1];
         }
 
         public void ConstructGrid() {
@@ -71,7 +75,7 @@ namespace MES_GridDrawer.FEM {
             int index = 0;
             for (int x = 0; x < _globalData.NodesLength - 1; x++) {
                 for (int y = 0; y < _globalData.NodesHeight - 1; y++) {
-                    var element = new Element(index, x, y, FindElementNodes(x, y), UniversalElement);
+                    var element = new Element(index, x, y, FindElementNodes(x, y), UniversalElement, _globalData);
                     Elements[index] = element;
                     index++;
                 }
@@ -112,7 +116,10 @@ namespace MES_GridDrawer.FEM {
                     for (int j = 0; j < Element.ELEMENT_NODES_COUNT; j++) {
                         HGlobalMatrix[nodeIndices[i], nodeIndices[j]] += element.HLocalMatrix[i, j]
                                                                          + element.HBcLocalMatrix[i, j];
+                        CGlobalMatrix[nodeIndices[i], nodeIndices[j]] += element.CLocalMatrix[i, j];
                     }
+
+                    PGlobalVector[nodeIndices[i], 0] += element.PVector[i, 0];
                 }
             }
         }

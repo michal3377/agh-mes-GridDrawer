@@ -40,6 +40,7 @@
             this.tbNodesRealLength = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.btSimulate = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btConstructGrid
@@ -154,11 +155,22 @@
             this.label5.TabIndex = 2;
             this.label5.Text = "L";
             // 
+            // btSimulate
+            // 
+            this.btSimulate.Location = new System.Drawing.Point(12, 338);
+            this.btSimulate.Name = "btSimulate";
+            this.btSimulate.Size = new System.Drawing.Size(78, 32);
+            this.btSimulate.TabIndex = 4;
+            this.btSimulate.Text = "Simulate";
+            this.btSimulate.UseVisualStyleBackColor = true;
+            this.btSimulate.Click += new System.EventHandler(this.btSimulate_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(617, 382);
+            this.Controls.Add(this.btSimulate);
             this.Controls.Add(this.tbElementInfo);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label5);
@@ -193,6 +205,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox tbNodesRealLength;
         private System.Windows.Forms.TextBox tbNodesRealHeight;
+        private System.Windows.Forms.Button btSimulate;
     }
 }
 
