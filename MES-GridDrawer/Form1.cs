@@ -31,31 +31,42 @@ namespace MES_GridDrawer
                 double rL = double.Parse(tbNodesRealLength.Text.Replace('.',','));
                 int h = int.Parse(tbNodesHeight.Text);
                 int l = int.Parse(tbNodesLength.Text);
-                _globalData = new GlobalData {
+                double initTemp = double.Parse(tbInitTemp.Text.Replace('.', ','));
+                double simulTime = double.Parse(tbSimulationTime.Text.Replace('.', ','));
+                double simulStepTime = double.Parse(tbSimulationStepTime.Text.Replace('.', ','));
+                double ambientTemp= double.Parse(tbAmbientTemp.Text.Replace('.', ','));
+                double alpha = double.Parse(tbAlpha.Text.Replace('.', ','));
+                double specificHeat = double.Parse(tbSpecificHeat.Text.Replace('.', ','));
+                double conductivity= double.Parse(tbConductivity.Text.Replace('.', ','));
+                double density = double.Parse(tbDensity.Text.Replace('.', ','));
+            _globalData = new GlobalData {
                     NodesHeight = h,
                     NodesLength = l,
                     RealHeight = rH,
                     RealLength = rL,
                     
-                    InitialTemperature = 100,
-                    AmbientTemperature = 1200,
-                    Alpha = 300,
-                    SpecificHeat = 700,
-                    Conductivity = 25,
-                    Density = 7800
+                    InitialTemperature = initTemp,
+                    AmbientTemperature = ambientTemp,
+                    Alpha = alpha,
+                    SpecificHeat = specificHeat,
+                    Conductivity = conductivity,
+                    Density = density,
+                    SimulationTime = simulTime,
+                    SimulationStepTime = simulStepTime
                 };
                 _grid = new Grid(_globalData);
                 _grid.ConstructGrid();
                 _grid.CalculateMatrices();
                 btGetElementInfo.Enabled = true;
+                btSimulate.Enabled = true;
 //                tbElementInfo.Text += $"HGlobal: {_grid.HGlobalMatrix.ToStringMatrix()}";
 #if CATCH_EXC
             } catch (Exception exception) {
                 MessageBox.Show(exception.Message);
             }
 #endif
-            
-            
+
+
         }
 
         private void btGetElementInfo_Click(object sender, EventArgs e) {
@@ -73,12 +84,9 @@ namespace MES_GridDrawer
 #endif
         }
 
-        private async void btSimulate_Click(object sender, EventArgs e) {
-            var stepTime = 1d;
-//            var stepTime = 50d;
-            var time = 100d;
-//            var time = 500d;
-            
+        private async void btSimulate_Click(object sender, EventArgs e)
+        {
+            btSimulate.Enabled = false;
             var dof = _grid.Nodes.Length;
             var initTempVector = new double[dof, 1];
             initTempVector.FillWithValue(_globalData.InitialTemperature);
@@ -86,10 +94,16 @@ namespace MES_GridDrawer
             
             await Task.Run(() => {
                 var simulator = new ProcessSimulator(_grid.HGlobalMatrix, _grid.CGlobalMatrix,
-                    _grid.PGlobalVector, initTempVector, stepTime, time);
+                    _grid.PGlobalVector, initTempVector, _globalData.SimulationStepTime, _globalData.SimulationTime);
                 simulator.LogMessageDelegate = msg => tbElementInfo.SafeInvoke(()=> tbElementInfo.AppendText($"{Environment.NewLine}{msg}"));
                 simulator.Simulate();
             });
+            btSimulate.Enabled = true;
+        }
+
+        private void Label10_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

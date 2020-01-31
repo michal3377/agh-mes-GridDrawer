@@ -19,5 +19,8 @@ namespace MES_GridDrawer.FEM {
         public double Density;
         public double InitialTemperature;
 
+        public double SimulationTime;
+        public double SimulationStepTime;
+
     }
 }
