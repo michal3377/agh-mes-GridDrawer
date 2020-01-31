@@ -21,6 +21,7 @@ namespace MES_GridDrawer.FEM {
         public double[,] HLocalMatrix;
         public double[,] HBcLocalMatrix;
         public double[,] CLocalMatrix;
+        public double[,] PVector;
 
         public Element(int id, int x, int y, Node[] nodes, UniversalElement universalElement) {
             Id = id;
@@ -42,6 +43,7 @@ namespace MES_GridDrawer.FEM {
             HLocalMatrix = new double[4,4]; 
             HBcLocalMatrix = new double[4,4]; 
             CLocalMatrix = new double[4,4]; 
+            PVector = new double[4,1];
             
             for (int i = 0; i < pcCount; i++) {
                 Jacobians[i] = new double[2,2];
@@ -56,7 +58,7 @@ namespace MES_GridDrawer.FEM {
             TransformJacobians();
             CalculateHLocal(30);
             CalculateCLocal(700, 7800);
-            CalculateHBcLocal(25);
+            CalculateBoundaryConditions(25, 1200);
             RoundMatrices();
         }
 
@@ -182,7 +184,7 @@ namespace MES_GridDrawer.FEM {
             }
         }      
         
-        private void CalculateHBcLocal(int alpha) {
+        private void CalculateBoundaryConditions(int alpha, double ambientTemperature) {
 
             for (int i = 0; i < ELEMENT_NODES_COUNT; i++) {
                 var current = Nodes[i];
@@ -197,10 +199,16 @@ namespace MES_GridDrawer.FEM {
                         var NValues = UniversalElement.CalculateNValues(point);
                         var NValuesT = NValues.Transpose();
                         
+                        // [Hbc]
                         var NxN = MatrixUtils.MultiplyMatrices(NValues.ToMatrix(), NValuesT);
                         var factor = point.WeightKsi * point.WeightEta * jacobianDet * alpha;
                         var HBcPartial = MatrixUtils.MultiplyMatrix(NxN, factor);
                         HBcLocalMatrix = MatrixUtils.AddMatrices(HBcLocalMatrix, HBcPartial);
+
+                        // {P}
+                        var vectPFactor = point.WeightKsi * point.WeightEta * jacobianDet * alpha * ambientTemperature;
+                        var vectorPPartial = MatrixUtils.MultiplyMatrix(NValues.ToMatrix(), vectPFactor);
+                        PVector = MatrixUtils.AddMatrices(PVector, vectorPPartial);
                     }
                 }
             }
@@ -227,6 +235,7 @@ namespace MES_GridDrawer.FEM {
                    $"{nl} Wyznaczniki: {JacobianDeterminals.ToStringVector()}" +
                    $"{nl} Macierz H lokalna: {HLocalMatrix.ToStringMatrix()}" +
                    $"{nl} Macierz HBc lokalna: {HBcLocalMatrix.ToStringMatrix()}" +
+                   $"{nl} Wektor P: {PVector.ToStringMatrix()}" +
                    $"{nl} Macierz C lokalna: {CLocalMatrix.ToStringMatrix()}";
             return str;
         }
