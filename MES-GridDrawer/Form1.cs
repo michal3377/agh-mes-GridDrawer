@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MES_GridDrawer.FEM;
+using MES_GridDrawer.Utils;
 
 //#define CATCH_EXC
 
@@ -35,7 +36,9 @@ namespace MES_GridDrawer
                 };
                 _grid = new Grid(data);
                 _grid.ConstructGrid();
+                _grid.CalculateMatrices();
                 btGetElementInfo.Enabled = true;
+                tbElementInfo.Text += $"HGlobal: {_grid.HGlobalMatrix.ToStringMatrix()}";
             } catch (Exception exception) {
                 MessageBox.Show(exception.Message);
             }
@@ -50,7 +53,6 @@ namespace MES_GridDrawer
 #endif 
                 int id = int.Parse(tbElementId.Text);
                 var element = _grid.Elements[id];
-                element.CalculateMatrices();
                 tbElementInfo.Text += $"{element}{Environment.NewLine}";
 #if CATCH_EXC
             } catch (Exception exception) {

@@ -1,3 +1,5 @@
+using System;
+
 namespace MES_GridDrawer.FEM {
     public class Grid {
         public Element[] Elements;
@@ -7,17 +9,29 @@ namespace MES_GridDrawer.FEM {
         
         private GlobalData _globalData;
 
+        public double[,] HGlobalMatrix; 
+
         public Grid(GlobalData globalData) {
             _globalData = globalData;
             Elements = new Element[globalData.ElementsCount];
             Nodes = new Node[globalData.NodesCount];
             
             UniversalElement = UniversalElement.CreateDefault2Point();
+
+            int dof = Nodes.Length;
+            HGlobalMatrix = new double[dof, dof];
         }
 
         public void ConstructGrid() {
             CreateNodesArray();
             CreateElementsArray();
+        }
+
+        public void CalculateMatrices() {
+            foreach (var element in Elements) {
+                element.CalculateMatrices();
+            }
+            AggregateLocalValues();
         }
 
         public Node GetNodeAt(int x, int y) {
@@ -87,6 +101,20 @@ namespace MES_GridDrawer.FEM {
 
         private double CalculateRealY(int yIndex) {
             return (_globalData.RealHeight / _globalData.ElementsHeight) * yIndex;
+        }
+
+        private void AggregateLocalValues() {
+            foreach (var element in Elements) {
+                var nodeIndices = new int[element.Nodes.Length];
+                for (var i = 0; i < element.Nodes.Length; i++) nodeIndices[i] = element.Nodes[i].Id;
+
+                for (int i = 0; i < Element.ELEMENT_NODES_COUNT; i++) {
+                    for (int j = 0; j < Element.ELEMENT_NODES_COUNT; j++) {
+                        HGlobalMatrix[nodeIndices[i], nodeIndices[j]] += element.HLocalMatrix[i, j]
+                                                                         + element.HBcLocalMatrix[i, j];
+                    }
+                }
+            }
         }
     }
 }
