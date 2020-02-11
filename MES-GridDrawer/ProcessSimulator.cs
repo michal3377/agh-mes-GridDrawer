@@ -46,8 +46,12 @@ namespace MES_GridDrawer {
         }
 
         public List<SimulationResult> Simulate() {
+            LogMessageDelegate?.Invoke($"Solving the equation...");
+
             CalculateConstantValues();
             var results = new List<SimulationResult>();
+
+            LogMessageDelegate?.Invoke($"Simulating the process");
 
             for (double i = StepTime; i <= SimulationTime; i += StepTime) {
                 SearchingTemperatures = MatrixUtils.MultiplyMatrices(HMatrixInverted, NewPVector);
