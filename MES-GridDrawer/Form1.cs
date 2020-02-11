@@ -18,9 +18,13 @@ namespace MES_GridDrawer
         private Grid _grid;
         private GlobalData _globalData;
 
+        private List<SimulationResult> _lastResults;
+        private PlotForm _plotForm;
+
         public Form1()
         {
             InitializeComponent();
+            _plotForm = new PlotForm();
         }
 
         private void btConstructGrid_Click(object sender, EventArgs e) {
@@ -91,19 +95,27 @@ namespace MES_GridDrawer
             var initTempVector = new double[dof, 1];
             initTempVector.FillWithValue(_globalData.InitialTemperature);
 
-            
+            var simulator = new ProcessSimulator(_grid.HGlobalMatrix, _grid.CGlobalMatrix,
+                _grid.PGlobalVector, initTempVector, _globalData.SimulationStepTime, _globalData.SimulationTime);
+            simulator.LogMessageDelegate = msg => tbElementInfo.SafeInvoke(()=> tbElementInfo.AppendText($"{Environment.NewLine}{msg}"));
+
             await Task.Run(() => {
-                var simulator = new ProcessSimulator(_grid.HGlobalMatrix, _grid.CGlobalMatrix,
-                    _grid.PGlobalVector, initTempVector, _globalData.SimulationStepTime, _globalData.SimulationTime);
-                simulator.LogMessageDelegate = msg => tbElementInfo.SafeInvoke(()=> tbElementInfo.AppendText($"{Environment.NewLine}{msg}"));
-                simulator.Simulate();
+                _lastResults = simulator.Simulate();
             });
             btSimulate.Enabled = true;
+            _plotForm.Show();
+            _plotForm.Visualize(_grid, _lastResults);
         }
 
         private void Label10_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            _plotForm.Show();
+            _plotForm.TestPlot();
         }
     }
 }

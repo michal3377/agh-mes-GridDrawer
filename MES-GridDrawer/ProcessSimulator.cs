@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MES_GridDrawer.Utils;
 
 namespace MES_GridDrawer {
@@ -8,14 +9,14 @@ namespace MES_GridDrawer {
 
         public LogMessage LogMessageDelegate;
         
-        public double[,] HGlobalMatrix;
-        public double[,] CGlobalMatrix;
-        public double[,] PGlobalVector;
-        public double[,] InitialTemperatures;
+        public readonly double[,] HGlobalMatrix;
+        public readonly double[,] CGlobalMatrix;
+        public readonly double[,] PGlobalVector;
+        public readonly double[,] InitialTemperatures;
 
-        public double StepTime;
-        public double SimulationTime;
-        
+        public readonly double StepTime;
+        public readonly double SimulationTime;
+
         public double[,] CMatrixByTau;
         public double[,] HMatrixInverted;
         public double[,] NewPVector;
@@ -29,7 +30,6 @@ namespace MES_GridDrawer {
             InitialTemperatures = initialTemperatures;
             StepTime = stepTime;
             SimulationTime = simulationTime;
-            CalculateConstantValues();
         }
 
         public void CalculateConstantValues() {
@@ -45,17 +45,33 @@ namespace MES_GridDrawer {
             NewPVector = MatrixUtils.AddMatrices(NewPVector, PGlobalVector);
         }
 
-        public void Simulate() {
+        public List<SimulationResult> Simulate() {
+            CalculateConstantValues();
+            var results = new List<SimulationResult>();
+
             for (double i = StepTime; i <= SimulationTime; i += StepTime) {
                 SearchingTemperatures = MatrixUtils.MultiplyMatrices(HMatrixInverted, NewPVector);
                 var minMax = SearchingTemperatures.FindMinAndMaxValue();
                 var min = minMax.Item1;
                 var max = minMax.Item2;
                 LogMessageDelegate?.Invoke($"StepTime = {i}; Min temp = {min}; Max temp = {max}");
+                results.Add(new SimulationResult {
+                    Values = SearchingTemperatures.GetColumn(0),
+                    Max = max,
+                    Min = min, 
+                    Tau = i
+                });
                 CalculateNewP(SearchingTemperatures);
             }
+
+            return results;
         }
         
         
+    }
+
+    public class SimulationResult {
+        public double[] Values;
+        public double Min, Max, Tau;
     }
 }
