@@ -13,12 +13,13 @@ namespace MES_GridDrawer.FEM {
         public double[,] CGlobalMatrix; 
         public double[,] PGlobalVector; 
 
-        public Grid(GlobalData globalData) {
+        public Grid(GlobalData globalData, bool gaussian3Point) {
             _globalData = globalData;
             Elements = new Element[globalData.ElementsCount];
             Nodes = new Node[globalData.NodesCount];
             
-            UniversalElement = UniversalElement.CreateDefault2Point();
+            UniversalElement = gaussian3Point ? UniversalElement.CreateDefault3Point() 
+                : UniversalElement.CreateDefault2Point();
 
             int dof = Nodes.Length;
             HGlobalMatrix = new double[dof, dof];

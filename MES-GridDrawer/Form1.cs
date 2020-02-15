@@ -58,7 +58,7 @@ namespace MES_GridDrawer
                     SimulationTime = simulTime,
                     SimulationStepTime = simulStepTime
                 };
-                _grid = new Grid(_globalData);
+                _grid = new Grid(_globalData, rb3Point.Checked);
                 _grid.ConstructGrid();
                 _grid.CalculateMatrices();
                 btGetElementInfo.Enabled = true;

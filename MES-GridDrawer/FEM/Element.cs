@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Forms;
 using MES_GridDrawer.Utils;
 
 namespace MES_GridDrawer.FEM {
@@ -61,7 +62,7 @@ namespace MES_GridDrawer.FEM {
             CalculateHLocal(_globalData.Conductivity);
             CalculateCLocal(_globalData.SpecificHeat, _globalData.Density);
             CalculateBoundaryConditions(_globalData.Alpha, _globalData.AmbientTemperature);
-            RoundMatrices();
+//            RoundMatrices();
         }
 
         private void RoundMatrices() {
@@ -108,7 +109,7 @@ namespace MES_GridDrawer.FEM {
         }
 
         private void TransformJacobians() {
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < UniversalElement.PointsCount; i++) {
                 var jacobian = Jacobians[i];
                 TransformedJacobians[i][0, 0] = jacobian[1, 1];
                 TransformedJacobians[i][1, 1] = jacobian[0, 0];
@@ -173,7 +174,7 @@ namespace MES_GridDrawer.FEM {
         }
         
         private void CalculateCLocal(double c, double ro) {
-            //H local per point:
+            //C local per point:
             for (int i = 0; i < UniversalElement.PointsCount; i++) {
                 var NValues = UniversalElement.NValues[i].ToMatrix();
                 var NValuesT = UniversalElement.NValues[i].Transpose();

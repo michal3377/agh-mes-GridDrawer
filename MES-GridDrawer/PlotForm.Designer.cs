@@ -36,43 +36,61 @@
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.trackBar1)).BeginInit();
             this.SuspendLayout();
+            // 
+            // pictureBox1
+            // 
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.BackColor = System.Drawing.Color.White;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(803, 459);
+            this.pictureBox1.Size = new System.Drawing.Size(937, 530);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            // 
+            // trackBar1
+            // 
             this.trackBar1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.trackBar1.LargeChange = 0;
-            this.trackBar1.Location = new System.Drawing.Point(0, 494);
+            this.trackBar1.Location = new System.Drawing.Point(0, 570);
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(803, 45);
+            this.trackBar1.Size = new System.Drawing.Size(937, 45);
             this.trackBar1.SmallChange = 0;
             this.trackBar1.TabIndex = 1;
             this.trackBar1.Scroll += new System.EventHandler(this.TrackBar1_Scroll);
             this.trackBar1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TrackBar1_MouseDown);
             this.trackBar1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TrackBar1_MouseUp);
+            // 
+            // btPlay
+            // 
             this.btPlay.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btPlay.Location = new System.Drawing.Point(12, 465);
+            this.btPlay.Location = new System.Drawing.Point(14, 537);
             this.btPlay.Name = "btPlay";
-            this.btPlay.Size = new System.Drawing.Size(75, 23);
+            this.btPlay.Size = new System.Drawing.Size(87, 27);
             this.btPlay.TabIndex = 2;
             this.btPlay.Text = "Play";
             this.btPlay.UseVisualStyleBackColor = true;
             this.btPlay.Click += new System.EventHandler(this.BtPlay_Click);
+            // 
+            // lbCurrentInfo
+            // 
             this.lbCurrentInfo.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lbCurrentInfo.AutoSize = true;
-            this.lbCurrentInfo.Location = new System.Drawing.Point(135, 470);
+            this.lbCurrentInfo.Location = new System.Drawing.Point(157, 542);
             this.lbCurrentInfo.Name = "lbCurrentInfo";
-            this.lbCurrentInfo.Size = new System.Drawing.Size(35, 13);
+            this.lbCurrentInfo.Size = new System.Drawing.Size(38, 15);
             this.lbCurrentInfo.TabIndex = 3;
             this.lbCurrentInfo.Text = "label1";
-            this.timer1.Interval = 150;
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 50;
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            // 
+            // PlotForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 533);
+            this.ClientSize = new System.Drawing.Size(933, 615);
             this.Controls.Add(this.lbCurrentInfo);
             this.Controls.Add(this.btPlay);
             this.Controls.Add(this.trackBar1);

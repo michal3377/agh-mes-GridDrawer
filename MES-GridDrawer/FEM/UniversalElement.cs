@@ -80,13 +80,13 @@ namespace MES_GridDrawer.FEM {
                     //horizontal
                     var point = Points[i];
                     var eta = edgeIndex == 0 ? -1 : 1;
-                    var projected = new IntegrationPoint(point.Ksi, eta, point.WeightKsi, point.WeightEta);
+                    var projected = new IntegrationPoint(point.Ksi, eta, point.WeightKsi, 1);
                     points.Add(projected);
                 } else {
                     //vertical
                     var point = Points[i * pointsCountForEdge];
                     var ksi = edgeIndex == 3 ? -1 : 1;
-                    var projected = new IntegrationPoint(ksi, point.Eta, point.WeightKsi, point.WeightEta);
+                    var projected = new IntegrationPoint(ksi, point.Eta, 1, point.WeightEta);
                     points.Add(projected);
                 }
             }
